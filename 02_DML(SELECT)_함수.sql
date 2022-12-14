@@ -311,7 +311,7 @@ FROM DUAL;
 -- DATE2가 미래일 경우 음수가 나옴.
 
 -- 각 직원별 근무일수, 근무 개월수
-SELECT EMP_NAME,
+SELECT EMP_NAME, HIRE_DATE,
        FLOOR(SYSDATE - HIRE_DATE) || '일' 근무일수 , 
        FLOOR(MONTHS_BETWEEN(SYSDATE, HIRE_DATE)) || '개월' 근무개월수
 FROM EMPLOYEE;
@@ -436,7 +436,7 @@ SELECT TO_CHAR(HIRE_DATE, 'D'),
        TO_CHAR(HIRE_DATE, 'DDD')
 FROM EMPLOYEE;
 -- D : 1주일 기준으로 일요일부터 며칠째인지 알려주는 포맷.
---     (1 : 일요일 , 2 : 월요일 ,  3 : 화요일 ... 7: 토요일)
+--     (1 : 일요일 , 2 : 월요일 ,  3 : 화요일 ... 7 : 토요일)
 -- DD : 1달 기준으로 1일부터 며칠째인지 알려주는 포맷.
 -- DDD : 1년기준으로 1월 1일부터 며칠째인지 알려주는 포맷.
 
