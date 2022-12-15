@@ -105,17 +105,3 @@ HAVING ROUND(AVG(SALARY)) <= 3500000;
     6 - ORDER BY [정렬기준에 해당하는 칼럼명 / 별칭 / 컬럼의 순번] [ASC / DEST]생각가능 [NULLS FIRST / NULLS LAST]생략가능
     ★실행 순서 중요!!!!★
 */
-
-
-
-
-
-
-
-
-
-
-
-
-
-

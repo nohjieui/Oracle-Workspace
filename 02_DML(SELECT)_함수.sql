@@ -406,6 +406,7 @@ FROM DUAL;
 SELECT TO_CHAR(SYSDATE, 'MON DAY, YYYY')
 FROM DUAL;
 
+
 SELECT TO_CHAR(SYSDATE, 'YYYY'),
        TO_CHAR(SYSDATE, 'RRRR'),
        TO_CHAR(SYSDATE, 'YY'),
@@ -539,7 +540,6 @@ FROM EMPLOYEE;
 -- 해당 칼럼에 값이 존재할 경우 결과값 1 반환
 -- 해당 칼럼에 값이 NULL일 경우 결과값 2 반환
 
-
 -- 보너스가 있는 사원은 '보너스 있음' , 보너스가 없는 사원은 '보너스 없음'
 SELECT EMP_NAME, BONUS, NVL2(BONUS, '보너스 있음', '보너스 없음')
 FROM EMPLOYEE;
@@ -549,6 +549,9 @@ FROM EMPLOYEE;
 -- 두 값이 동일하지 않을 경우 비교대상 1을 반환
 SELECT NULLIF('123', '12')
 FROM DUAL;
+
+SELECT EMP_NAME, FLOOR(SYSDATE - HIRE_DATE)
+FROM EMPLOYEE;
 
 -- 선택함수 : DECODE => SWITCH문
 -- 선택함수 친구 : CASE WHEN THEN 구문 => IF 문
@@ -704,12 +707,3 @@ SELECT
     TO_CHAR(TO_DATE(SUBSTR(EMP_NO,1, 6)),' YY"년" MON DD"일"') AS 생년월일,
     EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM TO_DATE(SUBSTR(EMP_NO,1, 2), 'RRRR')) AS "나이(만)"
 FROM EMPLOYEE;
-
-
-
-
-
-
-
-
-

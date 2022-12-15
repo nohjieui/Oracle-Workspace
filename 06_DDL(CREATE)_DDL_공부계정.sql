@@ -12,7 +12,7 @@
     테이블 : 행(ROW), 열(COLUMN)로 구성되는 가장 기본적인 데이터베이스 객체 종류 중 하나.
             모든 데이터는 테이블을 통해서 저장됨(데이터를 조작하고자 하려면 무조건 테이블을 만들어야한다.)
             
-    표현법
+    [표현법]
     CREATE TABLE 테이블 (
     컬럼명 자료형,
     컬럼명 자료형,
@@ -48,7 +48,7 @@ CREATE TABLE MEMBER( -- 동일한 테이블명 중복 불가.
 SELECT * FROM MEMBER;
 
 -- 테이블 확인 방법 : 데이터 딕셔너리 이용.
--- 테이블 딕셔너리 : 다양한 객체들의 정보를 저장하고 있는 시스템 테이블
+-- 데이터 딕셔너리 : 다양한 객체들의 정보를 저장하고 있는 시스템 테이블
 SELECT * FROM USER_TABLES;
 -- USER_TABLES : 현재 이 사용자 계정이 가지고 있는 테이블들의 전반적인 구조를 확인할 수 있는 데이터 딕셔너리.
 
@@ -57,7 +57,7 @@ SELECT * FROM USER_TAB_COLUMNS;
 -- USER_TAB_COLUMNS : 현재 이 사용자 계정이 가지고 있는 테이블들의 모든 컬럼의 정보를 조회할 수 있는 데이터 딕셔너리.
 
 /*
-    컬럼에 주속 달기 (컬럼에 대한 설명)
+    컬럼에 주석 달기 (컬럼에 대한 설명)
     
     COMMENT ON COLUMN 테이블명.컬럼명 IS '주석내용';
 */
@@ -66,7 +66,7 @@ COMMENT ON COLUMN MEMBER.MEMBER_PWD IS '회원비밀번호';
 COMMENT ON COLUMN MEMBER.MEMBER_NAME IS '회원이름';
 COMMENT ON COLUMN MEMBER.MEMBER_DATE IS '회원생년월일';
 
--- INSERT문(데이터를 테이블에 추가할 수 있는 구문) =>
+-- INSERT문(데이터를 테이블에 추가할 수 있는 구문) => DML 문
 -- 한행으로 추가(행 기준으로 데이터 추가함), 추가할 값을 기술(값의 순서 중요!)
 -- [표현법]
 -- INSERT INTO 테이블명 VALUES (첫번째 칼럼값, 두번째 칼럼값, ...)
@@ -97,7 +97,7 @@ INSERT INTO MEMBER VALUES('user01', 'pass01' , '노지의' , '1995-02-08');
 */
 -- NOT NULL 제약조건을 가진 테이블 설정.
 -- 컬럼레벨방식 : 컬럼명 자료형 제약조건 => 제약조건을 부여하고자 하는 칼럼 뒤에 곧바로 기술.
-CREATE TABLE MAM_NOTNULL (
+CREATE TABLE MEM_NOTNULL (
     MEM_NO NUMBER NOT NULL,
     MEM_ID VARCHAR2(20) NOT NULL,
     MEM_PWD VARCHAR2(20) NOT NULL,
@@ -121,7 +121,7 @@ INSERT INTO MEM_NOTNULL VALUES(2, 'user01', 'pass01', null,null,null,null);
 
 CREATE TABLE MEM_UNIQUE(
     MEN_NO NUMBER NOT NULL,
-    MEM_ID VARCHAR2(20) NOT NULL UNIQUE, --제약조건 ??????????????????????
+    MEM_ID VARCHAR2(20) NOT NULL UNIQUE, -- 제약조건부여방식 : 칼럼레벨
     MEM_PWD VARCHAR2(20) NOT NULL,
     MEM_NAME VARCHAR2(20) NOT NULL
 );
@@ -134,7 +134,7 @@ CREATE TABLE MEM_UNIQUE(
     MEM_ID VARCHAR2(20) NOT NULL,
     MEM_PWD VARCHAR2(20) NOT NULL,
     MEM_NAME VARCHAR2(20) NOT NULL,
-    UNIQUE(MEM_ID) -- 테이블레벨방식
+    UNIQUE(MEM_ID)  -- 제약조건부여방식 : 테이블레벨
 );
 
 INSERT INTO MEM_UNIQUE VALUES(1,'user01', 'pass01', '노지의');
@@ -165,12 +165,12 @@ CREATE TABLE MEM_UNIQUE(
     MEN_NO NUMBER NOT NULL,
     MEM_ID VARCHAR2(20) NOT NULL,
     MEM_PWD VARCHAR2(20) NOT NULL,
-    MEM_NAME VARCHAR2(20) CONSTRAINT MEM_NAME NOT NULL, -- 컬럼레벨방식
+    MEM_NAME VARCHAR2(20) CONSTRAINT MEM_NAME_NM NOT NULL, -- 컬럼레벨방식
     CONSTRAINT MEM_ID_UQ UNIQUE(MEM_ID) -- 테이블레벨방식
 );
 INSERT INTO MEM_UNIQUE VALUES(1,'user01', 'pass01', '노지의');
 INSERT INTO MEM_UNIQUE VALUES(2,'user02', 'pass02', '노지의2');
-INSERT INTO MEM_UNIQUE VALUES(3,'user01', 'pass03', '노지의3');
+INSERT INTO MEM_UNIQUE VALUES(3,'user01', 'pass03', '노지의3'); --ORA-00001: 무결성 제약 조건(DDL.MEM_ID_UQ)에 위배됩니다
 
 /*
     3. PRIMARY KEY(기본키) 제약조건
@@ -190,19 +190,3 @@ CREATE TABLE MEM_PRIMARYKEY1 (
     PHONE VARCHAR2(15),
     EMAIL VARCHAR2(30)
 );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

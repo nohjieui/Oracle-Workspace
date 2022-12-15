@@ -261,7 +261,6 @@ SELECT *
 FROM EMPLOYEE
 WHERE EMAIL LIKE ('__\_%') ESCAPE '\';
 
-
 -----------------------실습문제-----------------------
 -- 1. 이름이 '연'으로 끝나는 사원들의 이름, 입사일 조회
 SELECT EMP_NAME, HIRE_DATE
