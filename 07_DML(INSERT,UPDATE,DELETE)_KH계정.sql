@@ -1,12 +1,11 @@
 /*
-    DML( DATA MANIPULATION LANGUAGE)
+    DML(DATA MANIPULATION LANGUAGE)
     
     데이터 조작 언어
     
     테이블에 새로운 데이터를 삽입(INSERT)하거나
     기존의 데이터를 수정(UPDATE)하거나
-    삭제(DELETE)하는 구문
-    
+    삭제(DELETE)하는 구문   
 */
 
 /*
@@ -17,10 +16,9 @@
     
     1)INSERT INTO 테이블명 VALUES(값1, 값2, 값3....);
     => 해당 테이블에 "모든"칼럼에 대해 추가하고자 하는 값을 내가 직접 제시해서 "한 행"씩 INSERT할때 쓰는 방법.
-    *주의사항 : 컬럼의 순서, 자료형, 갯수를 맞춰서 VALUES괄호() 안에 값을 나열해야함
-    -> 만약 값을 부족하게 제시했을 경우 에러발생(칼럼의 갯수가 부족)
-    -> 만약 값을 더 많이 제시했을 경우 에버발생(TOO MANY VALUES)
-    
+      *주의사항 : 컬럼의 순서, 자료형, 갯수를 맞춰서 VALUES괄호() 안에 값을 나열해야함
+      -> 만약 값을 부족하게 제시했을 경우 에러발생(칼럼의 갯수가 부족)
+      -> 만약 값을 더 많이 제시했을 경우 에러발생(TOO MANY VALUES)
 */
 --EMPLOYEE 테이블에 사원 정보 추가
 INSERT INTO EMPLOYEE
@@ -76,11 +74,8 @@ INSERT INTO BOARD_IMAGE
     SELECT 5 AS BOARD_IMAGE_NO, 'abc.jpg' AS ORIGIN_NAME,'2022122012349.jpg' AS CHANG_NAME
     FROM DUAL
 );
-
 SELECT *
 FROM BOARD_IMAGE;
-
-
 
 /*
     INSERT ALL 계열
@@ -89,12 +84,11 @@ FROM BOARD_IMAGE;
     
     1)INSERT ALL
       INTO 테이블1 VALUES(값들 나열)
-      INTO 테이블2 VALUES(값들 나열)
-      
+      INTO 테이블2 VALUES(값들 나열)   
 */
 --새로운 테이블 만들기
 --첫번째 테이블 : 급여가 300만원 이상인 사원들의 사번, 사원명, 직급명을 보관할 테이블
---테이블명 EMP_JOB/EMP_ID, EMP_NAME, JOB_NAME
+--테이블명 EMP_JOB / EMP_ID, EMP_NAME, JOB_NAME
 CREATE TABLE EMP_JOB(
     EMP_ID NUMBER,
     EMP_NAME VARCHAR2(20),
@@ -102,7 +96,7 @@ CREATE TABLE EMP_JOB(
 );
 
 --두번째 테이블: 급여가 300만원 이상인 사원들의 사번, 사원명, 부서명을 보관할 테이블
---테이블명 EMP_DEPT/EMP_ID, EMP_NAME, DEPT_TITLE
+--테이블명 EMP_DEPT / EMP_ID, EMP_NAME, DEPT_TITLE
 CREATE TABLE EMP_DEPT(
     EMP_ID NUMBER,
     EMP_NAME VARCHAR2(20),
@@ -118,8 +112,8 @@ WHERE SALARY >= 3000000;
 
 
 INSERT ALL
-INTO EMP_JOB VALUES(EMP_ID,EMP_NAME,JOB_NAME)
-INTO EMP_DEPT VALUES(EMP_ID,EMP_NAME,DEPT_TITLE)
+INTO EMP_JOB VALUES(EMP_ID, EMP_NAME, JOB_NAME)
+INTO EMP_DEPT VALUES(EMP_ID, EMP_NAME, DEPT_TITLE)
 SELECT EMP_ID, EMP_NAME, JOB_NAME, DEPT_TITLE
 FROM EMPLOYEE
 JOIN JOB USING(JOB_CODE)
@@ -135,7 +129,6 @@ SELECT * FROM EMP_DEPT;
      WHEN 조건1 THEN INTO 테이블명1 VALUES(컬럼명)
      WHEN 조건2 THEN INTO 테이블명2 VALUES(컬럼명)
      서브쿼리
-     
      => 조건에 맞는 값만 넣고 싶을때 사용
 */
 --테스트용 새로운 테이블 생성
@@ -162,7 +155,7 @@ WHERE HIRE_DATE >= '2010/01/01';
 INSERT ALL
 WHEN HIRE_DATE < '2010/01/01' 
 THEN INTO EMP_OLD(EMP_ID, EMP_NAME, HIRE_DATE, SALARY)
-WHEN HIRE_DATE > '2010/01/01' 
+WHEN HIRE_DATE >= '2010/01/01' 
 THEN INTO EMP_NEW(EMP_ID, EMP_NAME, HIRE_DATE, SALARY)
 SELECT EMP_ID, EMP_NAME, HIRE_DATE, SALARY
 FROM EMPLOYEE;

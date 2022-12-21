@@ -202,7 +202,7 @@ JOIN DEPARTMENT ON (DEPT_CODE = DEPT_ID);
     일치하는 행 + 기준이 되는 테이블 기준으로는 일치하지 않는행도 포함시켜서 조회.
 */ 
 -- "전체" 사원들의 사원명, 급여 , 부서명
--- 1. LEFT OUTER JOIN : 두 테이블 중 왼쪽에 있는 테이블을 기준으로 삼음.
+-- 1) LEFT OUTER JOIN : 두 테이블 중 왼쪽에 있는 테이블을 기준으로 삼음.
 --                      즉, 뭐가 되었든 왼편에 기술된 테이블의 데이터는 무조건 조회되게끔 한다.
 --                      (조인하는 테이블과 일치하는 값이 없더라도)
 --> ANSI 구문
@@ -287,7 +287,7 @@ FROM EMPLOYEE
 JOIN SAL_GRADE ON SALARY BETWEEN MIN_SAL AND MAX_SAL;
 
 /*
-    5. 자체조인 (SELE JOIN)
+    5. 자체조인 (SELF JOIN)
 
     같은 테이블끼리 조인하는 경우
     즉, 자기 자신의 테이블과 다시 조인은 맺겠다.
