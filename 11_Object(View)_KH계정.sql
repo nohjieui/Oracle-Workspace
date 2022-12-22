@@ -23,3 +23,118 @@ SELECT * FROM V_EMPLOYEEALL;
 
 -- 데이터 딕셔너리를 통해 VIEW 확인
 SELECT * FROM USER_VIEWS;
+
+CREATE OR REPLACE VIEW V_EMPLOYEE
+AS SELECT EMP_ID, EMP_NAME, DEPT_TITLE, SALARY, NATIONAL_NAME, JOB_NAME, BONUS
+   FROM EMPLOYEE E, DEPARTMENT D, LOCATION L, NATIONAL N, JOB J
+   WHERE E.DEPT_CODE = D.DEPT_ID
+     AND D.LOCATION_ID = L.LOCAL_CODE
+     AND L.NATIONAL_CODE = N.NATIONAL_CODE
+     AND E.JOB_CODE = J.JOB_CODE;
+
+SELECT *
+FROM V_EMPLOYEE
+WHERE NATIONAL_NAME = '한국';
+
+-- VIEW 삭제
+DROP VIEW V_EMPLOYEEALL;
+
+SELECT * FROM V_EMPLOYEEALL;
+
+-- 뷰 특징
+-- 1. 컬럼에 대한 산술연산 및 함수의 실행결과를 포함할 수 있다. 단, 반드시 별칭을 부여해야함.
+CREATE VIEW V_EMP_SALARY
+AS SELECT EMP_NAME, (SALARY + SALARY * NVL(BONUS, 0)) *12 AS 연봉
+FROM EMPLOYEE;
+
+SELECT * FROM V_EMP_SALARY;
+
+-- DECODE함수를 이용해서 사원의 이름, 사번, 직업명, 남자인지 여자인지 성별정보, 근속년수를 VIEW로 저장
+CREATE OR REPLACE VIEW V_EMP_JOB
+AS SELECT EMP_ID, EMP_NAME, JOB_NAME
+        , DECODE(SUBSTR(EMP_ID, 8 ,1), 1, '남자', 2, '여자') AS 성별
+        , EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM HIRE_DATE) AS 근속년수
+   FROM EMPLOYEE
+   JOIN JOB USING(JOB_CODE);
+
+SELECT *
+FROM V_EMP_JOB
+WHERE 근속년수 >= 20;
+
+/*
+    INSERT, UPDATE, DELETE 수행할 때 -> 수행 가능하지만 실제 테이블에 담겨있는 값이 변경됨
+    만약에 내가 업데이트하고자 하는 칼럼이 가상칼럼이라면 DML이 불가능함
+*/
+
+CREATE VIEW V_JOB
+AS SELECT * FROM JOB;
+
+SELECT * FROM V_JOB;
+
+SELECT * FROM JOB;
+
+INSERT INTO V_JOB
+VALUES('J8', '인턴');
+
+UPDATE V_JOB
+SET JOB_NAME = '신입'
+WHERE JOB_CODE = 'J8';
+
+/*
+    DML문으로 조작이 불가능한 경우
+    1. 뷰에서 정의하고 있지 않은 칼럼을 조작하는 경우
+    2. 뷰에 포함되지 않은 컬럼 중 베이스가 되는 칼럼에 NOT NULL 제약조건이 설정되어 있을 때
+    3. 산술연산으로 구성된 칼럼(가상칼럼)
+    4. 그룹함수, GROUP BY 절이 포함된 VIEW
+    5. DISTINCT를 포함하고 있는 경우
+    6. JOIN을 통해 여러테이블을 연결하고 있는 경우
+*/
+
+-- VIEW 옵션들
+-- 1. OR REPLACE 옵션. -> VIEW가 이미 존재한다면 현재 실행된 서브쿼리로 뷰를 바꿔주는 역할.
+
+-- 2. FORCE / NOFORCE 옵션 : 실제테이블이 없어도 VIEW를 먼저 생성할 수 있게 해주는 옵션.
+CREATE FORCE VIEW V_FORCETEST
+AS SELECT * FROM TEST2;
+
+SELECT * FROM V_FORCETEST;
+
+CREATE TABLE TEST2(
+    TEST NUMBER PRIMARY KEY
+);
+
+-- 3. WITH CHECK OPTION
+-- SELECT문의 WHERE절에서 사용한 칼럼을 "수정하지 못하게"하는 옵션
+CREATE OR REPLACE VIEW V_CHECKOPTION
+AS SELECT EMP_ID, EMP_NAME, SALARY, DEPT_CODE
+   FROM EMPLOYEE
+   WHERE DEPT_CODE = 'D5' WITH CHECK OPTION;
+   
+SELECT * FROM V_CHECKOPTION;
+
+UPDATE V_CHECKOPTION
+SET SALARY = 6000000
+WHERE EMP_ID = 207; -- 업데이트 성공
+UPDATE V_CHECKOPTION
+SET DEPT_CODE = 'D7'
+WHERE EMP_ID = 207; -- 업데이트 실패 : 뷰의 WITH CHECK OPTION의 조건에 위배 됩니다
+
+ROLLBACK;
+
+-- 4. WITH READ ONLY
+-- VIEW 자체를 수정하지 못하게 차단하는 옵션.
+CREATE OR REPLACE VIEW V_READONLY
+AS SELECT * FROM EMPLOYEE WITH READ ONLY;
+
+SELECT * FROM V_READONLY;
+
+UPDATE V_READONLY SET EMP_NAME = '노지의'; -- cannot perform a DML operation on a read-only view
+                                          -- : 읽기 전용 뷰에서는 DML 작업을 수행할 수 없습니다
+
+
+
+
+
+
+
+

@@ -6,7 +6,7 @@ CREATE TABLE TEST2(
 -- 2_2. CREATE TABLE 권한부여 받은 후
 CREATE TABLE TEST2(
     TEST_ID NUMBER
-);
+); -- Table TEST2이(가) 생성되었습니다.
 
 -- 테이블 생성권한 부여받은 후 TABLE 스페이스를 할당받으면, 계정이 소유하고 있는 테이블들을 조작하는 것도 가능해짐(DML)
 INSERT INTO TEST2 VALUES(1);
@@ -18,7 +18,7 @@ AS SELECT * FROM TEST2;
 
 -- 5. 
 -- SAMPLE2계정에서 KH계정의 테이블에 접근해서 조회해보기
-SELECT * FROM KH.EMPLOYEE;
+SELECT * FROM KH.EMPLOYEE; -- 권한 추가 전 에러발생 : 테이블 또는 뷰가 존재하지 않습니다
 
 INSERT INTO KH.DEPARTMENT VALUES('D0', '회계부', 'L2');
 
