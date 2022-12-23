@@ -130,11 +130,3 @@ SELECT * FROM V_READONLY;
 
 UPDATE V_READONLY SET EMP_NAME = '노지의'; -- cannot perform a DML operation on a read-only view
                                           -- : 읽기 전용 뷰에서는 DML 작업을 수행할 수 없습니다
-
-
-
-
-
-
-
-
