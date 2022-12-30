@@ -7,14 +7,14 @@
     JOIN을 해야하는 이유?
     관계형 데이터베이스에서는 최소한의 데이터로 각각의 테이블에 데이터를 보관하고 있음.
     사원정보는 사원테이블, 직급정보는 직급테이블, ... => 중복을 최소화하기 위함.
-    => 즉, JOIN 구문을 이용해서 여러개의 테이블간의 관계를 맽어서 같이 조회해야함.
-    => 단, 무작정 JOIN을 하는것이 아니라 테이블간에 "연결고리(포린키)"에 해당되는 칼럼을 매칭시켜서 조회해야함.
+    => 즉, JOIN 구문을 이용해서 여러개의 테이블간의 관계를 맺어서 같이 조회해야함.
+    => 단, 무작정 JOIN을 하는것이 아니라 테이블간에 "연결고리(FOREIGN KEY)"에 해당되는 칼럼을 매칭시켜서 조회해야함.
     
     문법상 분류 : JOIN은 크게 오라클 전용구문과 ANSI구문으로 나누어짐.
 
             오라클 전용 구문               |           ANSI구문(오라클 + 다른 DBMS에서 사용가능)
     =====================================================================================================
-            등기조인(EQUAL JOIN)          |           내부조인(INNER JOIN) -> JOIN USING/ON
+            등가조인(EQUAL JOIN)          |           내부조인(INNER JOIN) -> JOIN USING/ON
     -----------------------------------------------------------------------------------------------------
             포괄 조인                                 외부 조인(OUTER JOIN) -> JOIN USING
             (LEFT OUTER JOIN)                        왼쪽 외부조인(LEFT OUTER JOIN)
@@ -45,7 +45,7 @@ FROM JOB;
     ( == 일치하지 않는 값들은 결과에서 제외)
     => 동등비교 연산자 = 일치한다 라는 조건을 제시
     [표현법]
-    등가조인(오카클구문)
+    등가조인(오라클구문)
     SELECT 조회하고자하는 컬럼명들
     FROM 조인하고자하는 테이블명들
     WHERE 연결할 칼럼에 대한 조건을 제시(=)
@@ -55,7 +55,7 @@ FROM JOB;
     FROM 기준으로 삼을 테이블 1개만 제시
     JOIN 조인할 테이블 1개 제시 ON (연결할 컬럼에 대한 조건을 제시(=))
     
-    내부조인 (ANSI) : USING => 연결할 칼럼명이 동일 할 경우에만 씀
+    내부조인(ANSI) : USING => 연결할 칼럼명이 동일 할 경우에만 씀
     SELECT 조회하고자하는 컬럼명들
     FROM 기분으로 삼을 테이블명 1개만 제시
     JOIN 조인할 테이블명 1개만 제시 USING(연결할 컬럼명 1개만 제시)
@@ -78,7 +78,7 @@ WHERE DEPT_CODE = DEPT_ID; -- EMPLOYEE테이블의 DEPT_CODE값과 DEPARTMENT테
 -- 연결할 컬럼명이 일치(EMPLOYEE - JOB_CODE / JOB - JOB_CODE)
 SELECT EMP_ID, EMP_NAME, JOB_CODE, JOB_NAME
 FROM EMPLOYEE, JOB
-WHERE JOB_CODE = JOB_CODE; -- 에버발생 : column ambiguously defined : 컬럼명이 애매모호 하다. 
+WHERE JOB_CODE = JOB_CODE; -- 에러발생 : column ambiguously defined : 컬럼명이 애매모호 하다. 
                                                                     --> 확실히 어느테이블의 칼럼인지 제시해줘야함.
 -- 방법 1) 테이블명을 이용하는 방법. => 테이블명.컬럼명
 SELECT EMP_ID, EMP_NAME, EMPLOYEE.JOB_CODE, JOB_NAME

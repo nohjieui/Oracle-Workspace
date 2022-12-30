@@ -10,7 +10,7 @@
     1. 시퀀스 생성
     [표현법]
     CREATE SEQUENCE 시퀀스명
-    [
+    
         START WITH 시작숫자 => 처음 발생시킬 시작값 (DEFAULT 1)
         INCREMENT BY 증가값 => 한번 시퀀스가 증가할 때마다 몇씩 증가할지 결정 (DEFAULT 1)
         MAXVALUE 최대값 => 최대값 지정

@@ -1,15 +1,15 @@
 /*
-    <PL/SQL>
-    PROCEDURE LANGUAGE EXTENSION TO SQL
-    
-    오라클 자체에 내장되어 있는 절차적 언어.
-    SQL문장 내에서 변수의 정의, 조건처리(IF), 반복문처리(LOOP, FOR, WHILE), 예외처리 등을 지원하여 SQL문 단점을 보완.
-    다수의 SQL문을 한번에 실행 가능.
-    
-    PL/SQL문의 구조
-    - [선언부(DECLARE SECTION)] : DECLARE로 시작, 변수나 상수를 선언 및 초기화하는 부분
-    - 실행부(EXECUTABLE SECTION) : BEGIN으로 시작, SQL문 또는 제어문 등의 로직을 기술하는 부분
-    - [예외처리부(EXCEPTION SECTION)] : EXCEPTION로 시작, 예외발생시 해결하기 위한 구문을 미리 기술하는 부문
+        <PL/SQL>
+        PROCEDURE LANGUAGE EXTENSION TO SQL
+        
+        오라클 자체에 내장되어 있는 절차적 언어.
+        SQL문장 내에서 변수의 정의, 조건처리(IF), 반복문처리(LOOP, FOR, WHILE), 예외처리 등을 지원하여 SQL문 단점을 보완.
+        다수의 SQL문을 한번에 실행 가능.
+        
+        PL/SQL문의 구조
+        - [선언부(DECLARE SECTION)] : DECLARE로 시작, 변수나 상수를 선언 및 초기화하는 부분
+        - 실행부(EXECUTABLE SECTION) : BEGIN으로 시작, SQL문 또는 제어문 등의 로직을 기술하는 부분
+        - [예외처리부(EXCEPTION SECTION)] : EXCEPTION로 시작, 예외발생시 해결하기 위한 구문을 미리 기술하는 부문
 */
 -- * 화면에 HELLO ORACLE 출력해보기
 -- 1) 서버 아웃풋 옵션을 켜줌
@@ -57,9 +57,8 @@ BEGIN
     SAL := 3000000;
     
     -- 사원의 사번이 200번인 각 사원의 사번, 사원명, 월급을 대입
-    SELECT 
-             EMP_ID, EMP_NAME, SALARY --해당 SELECT 문에 INTO 절이 필요합니다.
-        INTO EID, ENAME, SAL
+    SELECT EMP_ID, EMP_NAME, SALARY -- 해당 SELECT 문에 INTO 절이 필요합니다.
+      INTO EID, ENAME, SAL
     FROM EMPLOYEE
     WHERE EMP_ID = &사번;
     
@@ -120,7 +119,7 @@ END;
 /*
     <조건문>
     
-    1) IF 조건식 THEN 실행내용
+    1) IF 조건식 THEN 실행내용 END IF;
     
     사번 입력받은 후 해당사원의 사번, 이름, 급여, 보너스율(%)을 출력
     단, 보너스를 받지 않는 사원은 보너스율 출력전 '보너스를 지급받지 않는 사원입니다'를 출력
@@ -220,7 +219,191 @@ BEGIN
     ELSIF SAL >= 3000000 THEN GRADE := '중급';
     ELSE GRADE := '초급';
     END IF;
-    
+
     DBMS_OUTPUT.PUT_LINE(ENAME || ' 사원의 급여 등급은 ' || GRADE || '입니다.');
+END;
+/
+
+-- 4) CASE 비교대상자 WHEN 동등비교값1 THEN 결과값1 WHEN 비교값2 THEN 결과값2 ELSE 결과값3 END;
+DECLARE
+    EMP EMPLOYEE%ROWTYPE;
+    DNAME VARCHAR2(10);
+BEGIN
+    SELECT *
+      INTO EMP
+      FROM EMPLOYEE
+     WHERE EMP_ID = &사번;
+     
+     DNAME := CASE EMP.DEPT_CODE
+                WHEN 'D1' THEN '인사팀'
+                WHEN 'D2' THEN '회계팀'
+                WHEN 'D3' THEN '마케팅팀'
+                WHEN 'D4' THEN '국내영업팀'
+                WHEN 'D9' THEN '총무팀'
+                ELSE '해외영업팀'
+              END;
+
+    DBMS_OUTPUT.PUT_LINE(EMP.EMP_NAME || '은 ' || DNAME || '입니다.');
+END;
+/
+--------------------------------------------------------------------------------
+/*
+    <반복문>
+    
+    1) Basic Loop문
+    [표현식]
+    LOOP
+        반복적으로 실행할 구문;
+        
+        *반목문을 빠져나갈 수 있는 구문
+    END LOOP;
+    
+    * 반복문을 빠져나갈수 있는 구문
+    1) IF 조건식 THEN EXIT; END IF;
+    2) EXIT WHEN 조건식;
+*/
+-- 1부터 5까지 순차적으로 1씩 증가하는 값을 출력하는 반복문
+-- 방법 1
+DECLARE
+    I NUMBER := 1; --for(int i = 1);
+BEGIN
+    LOOP
+        DBMS_OUTPUT.PUT_LINE(I);
+        I := I+1;
+        
+        IF I = 6
+            THEN EXIT;
+        END IF;
+    END LOOP;
+END;
+/
+-- 방법 2
+DECLARE
+    I NUMBER := 1;
+BEGIN
+    LOOP
+        DBMS_OUTPUT.PUT_LINE(I);
+        I := I+1;
+        
+        EXIT WHEN I = 6;
+        
+    END LOOP;
+END;
+/
+/*
+    2) FOR LOOP문
+    [표현식]
+    FOR 변수 IN [REVERSE]초기값 .. 최종값
+    LOOP
+        반복적으로 수행할 구문;
+    END LOOP;
+*/
+BEGIN
+    FOR I IN 1..5
+    LOOP
+        DBMS_OUTPUT.PUT_LINE(I);
+    END LOOP;
+END;
+/
+-- 1_프라이머리키 있는 테이블 생성
+CREATE TABLE TEST(
+    TNO NUMBER PRIMARY KEY,
+    TDATE DATE DEFAULT SYSDATE
+);
+
+-- 2_시퀀스 생성
+CREATE SEQUENCE SEQ_TNO
+START WITH 1 -- 시작값 1
+INCREMENT BY 2 -- 증가값 2
+MAXVALUE 1000
+NOCYCLE -- 값이 1000을 넘으면 1부터 다시 시작할건지 여부
+NOCACHE;
+
+-- 3_테이블안에 반복문을 이용해 데이터넣기
+BEGIN
+    FOR I IN 1..100 -- LIST의 사이즈만큼 반복
+    LOOP
+        INSERT INTO TEST VALUES(SEQ_TNO.NEXTVAL, DEFAULT);
+    END LOOP;
+END;
+/
+
+-- 4_실행
+SELECT * FROM TEST;
+
+/*
+    3) WHILE LOOP문
+    [표현식]
+    WHILE 반복문이 수행될 조건
+    LOOP
+        반복적으로 실행시킬 구문
+    END LOOP;
+*/
+DECLARE
+    I NUMBER := 1;
+BEGIN
+    WHILE I < 6
+    LOOP
+        DBMS_OUTPUT.PUT_LINE(I);
+        I := I+1;
+    END LOOP;
+END;
+/
+--------------------------------------------------------------------------------
+/*
+    3. 예외처리부
+    
+    예외(EXCEPTION) : 실행중 발생하는 오류
+    [표현식]
+    EXCEPTION
+        WHEN 예외1 THEN 예외처리구문1;
+        WHEN 예외2 THEN 예외처리구문2;
+        ...
+        WHEN OTHER THEN 예외처리구문;
+    
+    * 시스템예외(오라클에서 미리 정의해둔 예외)
+    - NO_DATA_FOUND : SELECT한 결과가 한 행도 없는 경우
+    - TOO_MANY_ROWS : SELECT한 결과가 어려행인 경우
+    - ZERO_DIVIDE : 0으로 나눌 때
+    - DUP_VAL_ON INDES : UNIQUE 제약조건에 위배되었을 때
+    ...
+*/
+-- 사용자가 입력한 숫자로 나눗셈 연산한 결과를 출력하는 프로그램.
+DECLARE
+    RESULT NUMBER;
+BEGIN
+    RESULT := 10 / &숫자;
+    DBMS_OUTPUT.PUT_LINE('결과 : ' || RESULT);
+EXCEPTION
+    --WHEN ZERO_DIVIDE THEN DBMS_OUTPUT.PUT_LINE('0으로 나눌 수 없습니다.');
+    WHEN OTHERS THEN DBMS_OUTPUT.PUT_LINE('나누기 연산시 0으로 나눌 수 없습니다.');
+END;
+/
+
+-- UNIQUE 제약조건위배
+BEGIN
+    UPDATE EMPLOYEE
+    SET EMP_ID = &사번
+    WHERE EMP_NAME = '선동일';
+EXCEPTION
+    WHEN DUP_VAL_ON_INDEX THEN DBMS_OUTPUT.PUT_LINE('이미 존재하는 사번입니다.');
+END;
+/
+
+DECLARE
+    EID EMPLOYEE.EMP_ID%TYPE;
+    ENAME EMPLOYEE.EMP_NAME%TYPE;
+BEGIN
+    SELECT EMP_ID, EMP_NAME
+      INTO EID, ENAME
+      FROM EMPLOYEE
+     WHERE MANAGER_ID = &사수사번;
+     
+     DBMS_OUTPUT.PUT_LINE('사번 : ' || EID);
+     DBMS_OUTPUT.PUT_LINE('이름 : '|| ENAME);
+     
+EXCEPTION
+    WHEN TOO_MANY_ROWS THEN DBMS_OUTPUT.PUT_LINE('너무 많은 행이 조회됨.');
+    WHEN NO_DATA_FOUND THEN DBMS_OUTPUT.PUT_LINE('데이터가 없습니다.');
 END;
 /

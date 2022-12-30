@@ -70,7 +70,7 @@ ALTER TABLE DEPT_COPY2 DROP COLUMN LNAME;
 
 -- 2) 제약조건 추가 / 삭제
 /*
-    2_2) 제약조건 추가
+    2_1) 제약조건 추가
     
     - PRIMARY KEY : ADD PRIMARY KEY(칼럼명);
     - FOREIGN KEY : ADD FOREIGN KEY(칼럼명) REFERENCES 참조할테이블[(참조할칼럼)]
@@ -151,12 +151,4 @@ DROP TABLE DEPT_TEST;
 
 -- 방법2) 부모테이블만 삭제하되 맞물려있는 외래키 제약조건도 함께 삭제해준다.
 DROP TABLE DEPT_TEST CASCADE CONSTRAINT;
-
-
-
-
-
-
-
-
 
